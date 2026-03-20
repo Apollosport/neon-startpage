@@ -1,0 +1,1099 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Startpage</title>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <style>
+      :root {
+        --bg-color: #0b0c10;
+        --panel-bg: rgba(20, 25, 35, 0.6);
+        --panel-border: rgba(0, 255, 255, 0.2);
+        --text-main: #c5c6c7;
+        --neon-cyan: #0ff;
+        --neon-magenta: #f0f;
+      }
+
+      body {
+        margin: 0;
+        padding: 40px 20px;
+        min-height: 100vh;
+        overflow-y: scroll;
+        box-sizing: border-box;
+        background-color: var(--bg-color);
+        /* 0.4 means 40% darkness. Adjust this number if you want it brighter or darker! */
+        /* background-image:
+          linear-gradient(rgba(13, 14, 21, 0.4), rgba(13, 14, 21, 0.4)),
+          url("background.jpg");
+        background-size: cover;
+        background-position: center; */
+
+        /* Gradient options instead of a background */
+        /* background: linear-gradient(135deg, #0b0c10 0%, #1a1a2e 50%, #16213e 100%); */
+        /* background: radial-gradient(circle at 50% 100%, #5b145a 0%, #211236 60%, #0b0c10 100%); */
+        background: linear-gradient(
+          135deg,
+          #0f0c29 0%,
+          #302b63 50%,
+          #4a00e0 100%
+        );
+
+        background-attachment: fixed;
+        color: var(--text-main);
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* Glassmorphism Panels */
+      .panel {
+        background: var(--panel-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--panel-border);
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        transition:
+          transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+          box-shadow 0.3s ease,
+          border 0.3s ease;
+        align-self: start;
+      }
+
+      .panel:hover {
+        transform: translateY(-5px) scale(1.02); /* Lifts and slightly enlarges the card */
+        box-shadow:
+          0 15px 35px rgba(0, 0, 0, 0.6),
+          0 0 15px rgba(0, 255, 255, 0.2);
+        border: 1px solid var(--neon-cyan);
+      }
+
+      h2 {
+        margin-top: 0;
+        color: var(--neon-cyan);
+        text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+        font-weight: 500;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-size: 1.1rem;
+        border-bottom: 1px solid var(--panel-border);
+        padding-bottom: 10px;
+      }
+
+      /* Search Bar */
+      .search-container {
+        margin-bottom: 30px;
+        text-align: center;
+        position: sticky;
+        top: 1.5rem;
+        z-index: 1;
+      }
+      input[type="text"] {
+        user-select: auto;
+        box-sizing: border-box;
+        width: 100%;
+        padding: 15px 20px;
+        background: var(--panel-bg);
+        border: 1px solid var(--neon-magenta);
+        border-radius: 30px;
+        color: #fff;
+        font-size: 1.1rem;
+        outline: none;
+        box-shadow: 0 0 10px rgba(255, 0, 255, 0.2);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      input[type="text"]:hover,
+      input[type="text"]:focus {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 10px 25px rgba(255, 0, 255, 0.4);
+      }
+
+      #searchInput:hover + #searchSuggestion,
+      #searchInput:focus + #searchSuggestion {
+        transform: translateY(-3px) scale(1.02);
+      }
+
+      #clearSearch {
+        transition:
+          opacity 0.2s,
+          transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+      }
+
+      #searchInput:hover ~ #clearSearch,
+      #searchInput:focus ~ #clearSearch {
+        transform: translateY(calc(-50% - 3px)) scale(1.02) !important;
+      }
+
+      /* Grids */
+      .grid {
+        display: grid;
+        /* Changed from 300px to 240px to make cards narrower */
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      /* Bulletproof Weather Layout System */
+      /* 1. Mobile Default (Stacked and Centered) */
+      .weather-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centers the whole block on mobile */
+        gap: 15px;
+      }
+      .weather-current {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centers the Temp and Icon */
+        text-align: center;
+      }
+      .weather-current-details {
+        font-size: 0.85rem;
+        color: var(--text-main);
+        margin-top: 5px;
+        white-space: nowrap;
+      }
+      .weather-forecast {
+        display: flex;
+        justify-content: space-between;
+        gap: 4px;
+        width: 100%;
+      }
+      .weather-day {
+        text-align: center;
+        flex: 1;
+        min-width: 0;
+      }
+      .weather-day-name {
+        color: var(--neon-cyan);
+        font-size: 0.85rem;
+      }
+      .weather-day-icon {
+        font-size: 1.2rem;
+        margin: 3px 0;
+      }
+      .weather-day-temps {
+        color: #c5c6c7;
+        font-size: 0.85rem;
+        white-space: nowrap;
+      }
+      .weather-day-low {
+        font-size: 0.75rem;
+        color: #777;
+        margin-left: 2px;
+      }
+
+      @media (min-width: 768px) {
+        .weather-container {
+          flex-direction: row;
+          gap: 0;
+        }
+        .weather-current {
+          flex: 1 1 0%;
+          min-width: 0; /* Stops text from ever stretching the box */
+          align-items: center;
+          text-align: center;
+          border-right: 1px solid var(--panel-border);
+          padding-right: 15px;
+        }
+        .weather-forecast {
+          flex: 1 1 0%;
+          min-width: 0;
+          padding-left: 15px;
+          justify-content: space-between;
+        }
+      }
+      .links-container {
+        max-height: 350px; /* Adjust this number to make cards taller or shorter */
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 5px;
+      }
+
+      .links-container::-webkit-scrollbar {
+        width: 6px;
+      }
+      .links-container::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .links-container::-webkit-scrollbar-thumb {
+        background: var(--panel-border);
+        border-radius: 3px;
+      }
+      .links-container::-webkit-scrollbar-thumb:hover {
+        background: var(--neon-magenta);
+      }
+
+      .link-wrapper {
+        min-width: 0;
+        overflow: hidden;
+      }
+      .link-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        margin-bottom: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+        text-decoration: none;
+        color: var(--text-main);
+        transition: all 0.2s;
+        min-width: 0;
+        overflow: hidden;
+      }
+      .link-item:hover {
+        background: rgba(0, 255, 255, 0.1);
+        color: #fff;
+        border-left: 3px solid var(--neon-cyan);
+      }
+      .link-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        min-width: 0; /* Critical for text truncation */
+      }
+      .link-icon {
+        margin-right: 15px;
+        font-size: 1.2rem; /* Keeps your emoji icons sized perfectly */
+        width: 20px; /* Hard limit on image width */
+        height: 20px; /* Hard limit on image height */
+        object-fit: contain; /* Ensures logos aren't stretched or distorted */
+        flex-shrink: 0; /* Prevents the flexbox from squishing the icon if the text is long */
+      }
+
+      /* Weather */
+      .weather-info {
+        font-size: 2rem;
+        color: #fff;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      }
+
+      /* RSS Feeds */
+      .rss-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 140px;
+        overflow-y: auto;
+      }
+      .rss-list li {
+        margin-bottom: 12px;
+        font-size: 0.95rem;
+      }
+      .rss-list a {
+        color: var(--text-main);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .rss-list a:hover {
+        color: var(--neon-magenta);
+      }
+
+      /* Custom Scrollbar for RSS */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--panel-border);
+        border-radius: 3px;
+      }
+      .link-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        flex: 1;
+      }
+      #weatherGrid {
+        /* min() allows it to shrink below 350px on phones without breaking the grid */
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+      }
+      /* Folding Categories */
+      details summary {
+        list-style: none;
+        cursor: pointer;
+        outline: none;
+      }
+      details summary::-webkit-details-marker {
+        display: none;
+      }
+      details summary h2 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: color 0.2s;
+      }
+      details summary:hover h2 {
+        color: #fff;
+      }
+      /* Rotates an arrow when open */
+      details[open] summary h2 .fold-arrow {
+        transform: rotate(180deg);
+      }
+    </style>
+    <link rel="icon" type="image/svg+xml" href="favicon.ico" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="grid" id="weatherGrid"></div>
+      <div class="grid" id="rssGrid"></div>
+      <div
+        class="search-container"
+        style="
+          display: flex;
+          justify-content: center;
+          gap: 15px;
+          align-items: center;
+          margin-bottom: 30px;
+        "
+      >
+        <div
+          style="position: relative; flex: 1; max-width: 500px; display: flex"
+        >
+          <input
+            type="text"
+            id="searchInput"
+            autofocus
+            placeholder="Search infrastructure..."
+            style="
+              position: relative;
+              margin-bottom: 0;
+              flex: 1;
+              padding-right: 40px;
+              background: transparent;
+              z-index: 2;
+            "
+          />
+
+          <input
+            type="text"
+            id="searchSuggestion"
+            disabled
+            style="
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+              margin: 0;
+              padding-right: 40px;
+              background: var(--panel-bg);
+              color: #555;
+              border-color: transparent;
+              box-shadow: none;
+              z-index: 1;
+            "
+          />
+
+          <span
+            id="clearSearch"
+            style="
+              position: absolute;
+              right: 15px;
+              top: 50%;
+              transform: translateY(-50%);
+              cursor: pointer;
+              color: var(--neon-magenta);
+              font-weight: bold;
+              display: none;
+              font-size: 1.2rem;
+              transition: opacity 0.2s;
+              z-index: 3;
+            "
+            onmouseover="this.style.opacity = 0.7"
+            onmouseout="this.style.opacity = 1"
+            >✕</span
+          >
+        </div>
+
+        <button
+          onclick="addBookmarkPrompt()"
+          style="
+            background: var(--panel-bg);
+            border: 1px solid var(--neon-cyan);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+          "
+          onmouseover="
+            this.style.transform = 'translateY(-3px)';
+            this.style.boxShadow = '0 10px 25px rgba(0, 255, 255, 0.4)';
+          "
+          onmouseout="
+            this.style.transform = 'none';
+            this.style.boxShadow = '0 0 10px rgba(0, 255, 255, 0.2)';
+          "
+        >
+          ➕ Add Link
+        </button>
+      </div>
+      <div class="grid" id="bookmarkGrid"></div>
+    </div>
+    <dialog
+      id="addModal"
+      class="panel"
+      style="
+        border: 1px solid var(--neon-cyan);
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+        border-radius: 12px;
+        background: var(--bg-color);
+        color: #fff;
+        max-width: 400px;
+        width: 100%;
+        padding: 25px;
+      "
+    >
+      <h2 style="margin-top: 0">Add New Bookmark</h2>
+      <div style="display: flex; flex-direction: column; gap: 15px">
+        <input
+          type="text"
+          id="addUrl"
+          placeholder="URL (https://...)"
+          style="
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--panel-border);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            outline: none;
+          "
+        />
+        <input
+          type="text"
+          id="addName"
+          placeholder="Site Name"
+          style="
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--panel-border);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            outline: none;
+          "
+        />
+
+        <select
+          id="addCatSelect"
+          style="
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--panel-border);
+            background: rgba(20, 25, 35, 1);
+            color: #fff;
+            outline: none;
+            cursor: pointer;
+          "
+        ></select>
+
+        <input
+          type="text"
+          id="addCatNew"
+          placeholder="New Category Name..."
+          style="
+            display: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--neon-magenta);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            outline: none;
+          "
+        />
+
+        <div
+          style="
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+          "
+        >
+          <button
+            onclick="document.getElementById('addModal').close()"
+            style="
+              background: transparent;
+              border: 1px solid #777;
+              color: #ccc;
+              padding: 10px 20px;
+              border-radius: 6px;
+              cursor: pointer;
+              transition: 0.2s;
+            "
+            onmouseover="
+              this.style.color = '#fff';
+              this.style.borderColor = '#fff';
+            "
+            onmouseout="
+              this.style.color = '#ccc';
+              this.style.borderColor = '#777';
+            "
+          >
+            Cancel
+          </button>
+          <button
+            onclick="submitNewBookmark()"
+            style="
+              background: rgba(0, 255, 255, 0.1);
+              border: 1px solid var(--neon-cyan);
+              color: var(--neon-cyan);
+              padding: 10px 20px;
+              border-radius: 6px;
+              cursor: pointer;
+              transition: 0.2s;
+            "
+            onmouseover="
+              this.style.background = 'var(--neon-cyan)';
+              this.style.color = '#000';
+            "
+            onmouseout="
+              this.style.background = 'rgba(0, 255, 255, 0.1)';
+              this.style.color = 'var(--neon-cyan)';
+            "
+          >
+            Save Link
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <script>
+      let allLinks = [];
+
+      // Initialize Dashboard
+      async function init() {
+        try {
+          const response = await fetch(
+            "config.json?t=" + new Date().getTime(),
+            { cache: "no-store" },
+          );
+          const config = await response.json();
+
+          loadWeather(config.weather);
+          loadBookmarks(config.bookmarks);
+          loadRSS(config.rss);
+          setupSearch();
+        } catch (error) {
+          console.error("Error loading config.json", error);
+        }
+      }
+
+      // Weather Loader
+      async function loadWeather(locations) {
+        const grid = document.getElementById("weatherGrid");
+        grid.innerHTML = "";
+
+        const getWeatherIcon = (code) => {
+          if (code === 0) return "☀️";
+          if (code <= 3) return "⛅";
+          if (code <= 48) return "🌫️";
+          if (code <= 67) return "🌧️";
+          if (code <= 77) return "❄️";
+          return "⛈️";
+        };
+
+        for (const loc of locations) {
+          const panel = document.createElement("div");
+          panel.className = "panel";
+          panel.innerHTML = `<h2>${loc.name} Weather</h2><div class="weather-info" id="temp-${loc.name}">Loading...</div>`;
+          grid.appendChild(panel);
+
+          try {
+            const res = await fetch(
+              `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`,
+            );
+            const data = await res.json();
+
+            const temp = data.current.temperature_2m;
+            const icon = getWeatherIcon(data.current.weather_code);
+            const rain = data.daily.precipitation_probability_max[0];
+            const high = Math.round(data.daily.temperature_2m_max[0]);
+            const low = Math.round(data.daily.temperature_2m_min[0]);
+
+            let forecastHtml = '<div class="weather-forecast">';
+            for (let i = 1; i <= 4; i++) {
+              const fIcon = getWeatherIcon(data.daily.weather_code[i]);
+              const fHigh = Math.round(data.daily.temperature_2m_max[i]);
+              const fLow = Math.round(data.daily.temperature_2m_min[i]);
+              const date = new Date(data.daily.time[i]);
+              const dayName = date.toLocaleDateString("en-US", {
+                weekday: "short",
+              });
+
+              forecastHtml += `
+                 <div class="weather-day">
+                   <div class="weather-day-name">${dayName}</div>
+                   <div class="weather-day-icon">${fIcon}</div>
+                   <div class="weather-day-temps">${fHigh}°<span class="weather-day-low">${fLow}°</span></div>
+                 </div>
+               `;
+            }
+            forecastHtml += "</div>";
+
+            // Inject the clean HTML
+            document.getElementById(`temp-${loc.name}`).innerHTML = `
+            <a href="https://zoom.earth/maps/precipitation/#view=${loc.lat},${loc.lon},10z" target="_blank" style="color:#fff; text-decoration:none; display: block;">
+                <div class="weather-container">
+                   <div class="weather-current">
+                     <div style="display:flex; align-items:center; gap:10px;">
+                       <span style="font-size: 2.2rem;">${icon}</span>
+                       <span style="font-size: 2.2rem;">${temp}°C</span>
+                     </div>
+                     <div class="weather-current-details">
+                       🌧️ ${rain}% &nbsp;|&nbsp; ⬆️ ${high}° ⬇️ ${low}°
+                     </div>
+                   </div>
+
+                   ${forecastHtml}
+
+                 </div>
+               </a>`;
+          } catch (e) {
+            document.getElementById(`temp-${loc.name}`).innerHTML =
+              `Error loading data`;
+          }
+        }
+      }
+
+      // Bookmark Loader with Drag & Drop
+      function loadBookmarks(categories) {
+        const grid = document.getElementById("bookmarkGrid");
+        grid.innerHTML = "";
+        allLinks = [];
+
+        categories.forEach((cat) => {
+          const panel = document.createElement("div");
+          panel.className = "panel bookmark-panel";
+
+          let html = `
+            <details open>
+              <summary><h2 style="cursor: grab;">${cat.category} <span class="fold-arrow" style="font-size:0.8rem; transition: transform 0.3s;">🔽</span></h2></summary>
+              <div class="links-container">`;
+
+          cat.links.forEach((link) => {
+            allLinks.push({
+              ...link,
+              elementId: link.name.toLowerCase().replace(/\s/g, "-"),
+            });
+            let domain = "";
+            try {
+              domain = new URL(link.url).hostname;
+            } catch (e) {
+              domain = link.url;
+            }
+            // 1. CHECK FOR LOCAL ICON FIRST!
+            // We ensure link.icon exists and isn't the default "🌐" from the Add Modal
+            const faviconUrl =
+              link.icon && link.icon !== "🌐"
+                ? link.icon
+                : `https://s2.googleusercontent.com/s2/favicons?domain=${domain}&sz=64`;
+
+            // 2. INJECT HTML (Notice the fixed ${domain} variable in the onerror fallback!)
+            html += `
+              <div class="link-wrapper" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 6px; transition: all 0.2s;">
+                <a href="${link.url}" title="${link.name}" class="link-item" style="background: transparent; margin-bottom: 0; flex-grow: 1; cursor: grab;" data-name="${link.name}" data-icon="${link.icon || ""}">
+                    <img loading="lazy" src="${faviconUrl}" class="link-icon" alt="icon" onerror="this.onerror=null; this.src='https://s2.googleusercontent.com/s2/favicons?domain=${domain}&sz=64';">
+                    <span class="link-text">${link.name}</span>
+                </a>
+                <span onclick="deleteBookmark('${cat.category}', '${link.name}')" style="cursor: pointer; padding: 10px; opacity: 0.5; transition: 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5" title="Delete Link">🗑️</span>
+              </div>
+            `;
+          });
+          html += `</div></details>`;
+          panel.innerHTML = html;
+          grid.appendChild(panel);
+        });
+
+        // --- INIT DRAG AND DROP ---
+
+        // 1. Make the Categories draggable
+        new Sortable(grid, {
+          animation: 150,
+          handle: "summary", // Only drag by the header
+          onEnd: saveDashboardState,
+        });
+
+        // 2. Make the Links draggable BETWEEN categories
+        document.querySelectorAll(".links-container").forEach((container) => {
+          new Sortable(container, {
+            group: "shared", // Allows dragging links into other categories!
+            animation: 150,
+            onEnd: saveDashboardState,
+          });
+        });
+      }
+
+      // Scrapes the UI after a drop and sends the new layout to FastAPI
+      async function saveDashboardState() {
+        const newBookmarks = [];
+
+        document.querySelectorAll(".bookmark-panel").forEach((panel) => {
+          // Extract the category name (ignoring the 🔽 arrow text)
+          const categoryName = panel
+            .querySelector("h2")
+            .childNodes[0].nodeValue.trim();
+          const links = [];
+
+          panel.querySelectorAll(".link-item").forEach((linkEl) => {
+            links.push({
+              name: linkEl.getAttribute("data-name"),
+              url: linkEl.getAttribute("href"),
+              icon: linkEl.getAttribute("data-icon"),
+            });
+          });
+
+          newBookmarks.push({ category: categoryName, links: links });
+        });
+
+        try {
+          await fetch("/api/bookmarks/reorder", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ bookmarks: newBookmarks }),
+          });
+        } catch (e) {
+          console.error("Failed to save layout", e);
+        }
+      }
+
+      async function deleteBookmark(category, name) {
+        if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+
+        try {
+          // Adjust this URL to wherever your FastAPI server is running
+          const response = await fetch("/api/bookmarks/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ category: category, name: name }),
+          });
+
+          if (response.ok) {
+            init(); // Instantly reload the dashboard to show the link is gone!
+          } else {
+            alert("Failed to delete bookmark.");
+          }
+        } catch (e) {
+          console.error("API Error:", e);
+        }
+      }
+
+      // High-Speed RSS Loader using rss2json
+      async function loadRSS(feeds) {
+        const grid = document.getElementById("rssGrid");
+        grid.innerHTML = "";
+        for (const feed of feeds) {
+          const panel = document.createElement("div");
+          panel.className = "panel";
+
+          panel.innerHTML = `<h2 id="rss-title-${feed.name}">${feed.name} News</h2><ul class="rss-list" id="rss-${feed.name}"><li>Loading feed...</li></ul>`;
+          grid.appendChild(panel);
+
+          try {
+            const res = await fetch(
+              `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`,
+            );
+            const data = await res.json();
+
+            if (data.status === "ok") {
+              const titleEl = document.getElementById(`rss-title-${feed.name}`);
+              if (titleEl && data.feed && data.feed.link) {
+                titleEl.innerHTML = `<a href="${data.feed.link}" target="_blank" style="color: inherit; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='inherit'">${feed.name} News</a>`;
+              }
+
+              let listHtml = "";
+
+              const freeArticles = data.items.filter(
+                (item) => !item.title.includes("heise+"),
+              );
+
+              for (let i = 0; i < Math.min(freeArticles.length, 6); i++) {
+                listHtml += `<li><a href="${freeArticles[i].link}" target="_blank">${freeArticles[i].title}</a></li>`;
+              }
+              document.getElementById(`rss-${feed.name}`).innerHTML = listHtml;
+            } else {
+              throw new Error("Feed parsing failed");
+            }
+          } catch (e) {
+            console.error(`Error loading ${feed.name}:`, e);
+            document.getElementById(`rss-${feed.name}`).innerHTML =
+              `<li>Failed to load feed.</li>`;
+          }
+        }
+      }
+
+      // Smart Local Search with Ghost Autocomplete & Omnibox
+      function setupSearch() {
+        const searchInput = document.getElementById("searchInput");
+        const searchSuggestion = document.getElementById("searchSuggestion");
+        const clearSearch = document.getElementById("clearSearch");
+
+        searchInput.focus();
+
+        const performSearch = () => {
+          const query = searchInput.value.toLowerCase();
+          clearSearch.style.display = query.length > 0 ? "block" : "none";
+
+          // --- AUTOCLOMPLETE GHOST TEXT LOGIC ---
+          if (query.length > 0) {
+            const match = allLinks.find((link) =>
+              link.name.toLowerCase().startsWith(query),
+            );
+            if (match) {
+              searchSuggestion.value =
+                searchInput.value + match.name.substring(query.length);
+            } else {
+              searchSuggestion.value = "";
+            }
+          } else {
+            searchSuggestion.value = "";
+          }
+
+          // --- VISUAL FILTERING LOGIC ---
+          const panels = document.querySelectorAll(".bookmark-panel");
+          panels.forEach((panel) => {
+            const h2Node = panel.querySelector("h2");
+            const catName = h2Node
+              ? h2Node.childNodes[0].nodeValue.trim().toLowerCase()
+              : "";
+
+            const links = panel.querySelectorAll(".link-wrapper");
+            const matchesCategory = catName.includes(query);
+            let hasVisibleLink = false;
+
+            links.forEach((wrapper) => {
+              const linkItem = wrapper.querySelector(".link-item");
+              const linkName = linkItem
+                ? linkItem.getAttribute("data-name").toLowerCase()
+                : "";
+
+              if (matchesCategory || linkName.includes(query)) {
+                wrapper.style.display = "flex";
+                hasVisibleLink = true;
+              } else {
+                wrapper.style.display = "none";
+              }
+            });
+
+            panel.style.display =
+              matchesCategory || hasVisibleLink ? "block" : "none";
+          });
+        };
+
+        searchInput.addEventListener("input", performSearch);
+
+        // --- THE MAGIC KEYBOARD CONTROLS ---
+        searchInput.addEventListener("keydown", (e) => {
+          // 1. TAB TO AUTOCOMPLETE
+          if (e.key === "Tab" && searchSuggestion.value !== "") {
+            e.preventDefault();
+            searchInput.value = searchSuggestion.value;
+            performSearch();
+            return;
+          }
+
+          // 2. ENTER TO NAVIGATE
+          if (e.key === "Enter" && searchInput.value.trim() !== "") {
+            const query = searchInput.value.trim();
+            const lowerQuery = query.toLowerCase();
+
+            // Check A: Does it exactly match a local bookmark name?
+            const localMatch = allLinks.find(
+              (link) => link.name.toLowerCase() === lowerQuery,
+            );
+            if (localMatch) {
+              window.location.href = localMatch.url;
+              return;
+            }
+
+            // Check B: Custom Search Shortcuts! (Google, Images, YouTube)
+            if (lowerQuery.startsWith("g ")) {
+              const searchTerm = encodeURIComponent(query.substring(2).trim());
+              window.location.href = `https://www.google.com/search?q=${searchTerm}`;
+              return;
+            }
+            if (lowerQuery.startsWith("gi ")) {
+              const searchTerm = encodeURIComponent(query.substring(3).trim());
+              window.location.href = `https://www.google.com/search?tbm=isch&q=${searchTerm}`;
+              return;
+            }
+            if (lowerQuery.startsWith("y ")) {
+              const searchTerm = encodeURIComponent(query.substring(2).trim());
+              window.location.href = `https://www.youtube.com/results?search_query=${searchTerm}`;
+              return;
+            }
+            if (lowerQuery.startsWith("m ")) {
+              const searchTerm = encodeURIComponent(query.substring(2).trim());
+              window.location.href = `https://www.google.com/maps/search/?api=1&query=${searchTerm}`;
+              return;
+            }
+            if (lowerQuery.startsWith("a ")) {
+              const searchTerm = encodeURIComponent(query.substring(2).trim());
+              window.location.href = `https://www.amazon.de/s?k=${searchTerm}`;
+              return;
+            }
+            if (lowerQuery.startsWith("c ")) {
+              const searchTerm = encodeURIComponent(query.substring(2).trim());
+              window.location.href = `https://www.check24.de/suche/?q=${searchTerm}`;
+              return;
+            }
+            if (lowerQuery.startsWith("i ")) {
+              const searchTerm = encodeURIComponent(query.substring(2).trim());
+              window.location.href = `https://www.idealo.de/preisvergleich/MainSearchProductCategory.html?q=${searchTerm}`;
+              return;
+            }
+            if (lowerQuery.startsWith("k ")) {
+              const searchTerm = encodeURIComponent(
+                query.substring(2).trim().replace(/\s+/g, "-"),
+              );
+              window.location.href = `https://www.kleinanzeigen.de/s-${searchTerm}/k0`;
+              return;
+            }
+            if (lowerQuery.startsWith("im ")) {
+              const searchTerm = encodeURIComponent(query.substring(3).trim());
+              window.location.href = `https://www.imdb.com/find/?q=${searchTerm}`;
+              return;
+            }
+            if (lowerQuery.startsWith("t ")) {
+              const searchTerm = encodeURIComponent(query.substring(2).trim());
+              window.location.href = `https://translate.google.com/?sl=auto&tl=en&text=${searchTerm}&op=translate`;
+              return;
+            }
+
+            // Check C: Is it a direct website URL?
+            const urlPattern =
+              /^(https?:\/\/)?([\w\-]+\.)+[a-z]{2,}(:\d+)?(\/.*)?$/i;
+            if (urlPattern.test(query)) {
+              const targetUrl = query.match(/^https?:\/\//i)
+                ? query
+                : `https://${query}`;
+              window.location.href = targetUrl;
+              return;
+            }
+
+            // Check D: It's just a normal query, send it to your Search Engine!
+            // REPLACE 'yourdomain.com' with your actual SearXNG instance, or use DuckDuckGo
+            window.location.href = `https://search.yourdomain.com/search?q=${encodeURIComponent(query)}`;
+            return;
+          }
+        });
+
+        clearSearch.addEventListener("click", () => {
+          searchInput.value = "";
+          performSearch();
+          searchInput.focus();
+        });
+
+        document.addEventListener("keydown", (e) => {
+          const activeTag = document.activeElement.tagName;
+          if (
+            e.key === "s" &&
+            activeTag !== "INPUT" &&
+            activeTag !== "SELECT"
+          ) {
+            e.preventDefault();
+            searchInput.focus();
+          }
+        });
+      }
+
+      // Opens the custom Add Link Modal
+      function addBookmarkPrompt() {
+        const modal = document.getElementById("addModal");
+        const select = document.getElementById("addCatSelect");
+        const newCatInput = document.getElementById("addCatNew");
+
+        // Reset inputs
+        document.getElementById("addUrl").value = "";
+        document.getElementById("addName").value = "";
+        newCatInput.value = "";
+        newCatInput.style.display = "none";
+
+        // Dynamically read the current categories from the screen
+        select.innerHTML = "";
+        const categories = new Set();
+        document.querySelectorAll(".bookmark-panel h2").forEach((h2) => {
+          categories.add(h2.childNodes[0].nodeValue.trim());
+        });
+
+        categories.forEach((cat) => {
+          select.innerHTML += `<option value="${cat}">${cat}</option>`;
+        });
+        select.innerHTML += `<option value="__NEW__">✨ + Create New Category</option>`;
+
+        // Toggle the custom text box if they want a new category
+        select.onchange = (e) => {
+          if (e.target.value === "__NEW__") {
+            newCatInput.style.display = "block";
+            newCatInput.focus();
+          } else {
+            newCatInput.style.display = "none";
+          }
+        };
+
+        modal.showModal();
+      }
+
+      // Sends the Modal data to Python
+      async function submitNewBookmark() {
+        const url = document.getElementById("addUrl").value.trim();
+        const name = document.getElementById("addName").value.trim();
+        let category = document.getElementById("addCatSelect").value;
+
+        if (category === "__NEW__") {
+          category = document.getElementById("addCatNew").value.trim();
+        }
+
+        if (!url || !name || !category) {
+          alert("Please fill out all fields!");
+          return;
+        }
+
+        try {
+          const response = await fetch("/api/bookmarks/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              category: category,
+              name: name,
+              url: url,
+              icon: "🌐",
+            }),
+          });
+
+          if (response.ok) {
+            document.getElementById("addModal").close();
+            init(); // Reload dashboard instantly
+          }
+        } catch (e) {
+          console.error("API Error:", e);
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>

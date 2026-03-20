@@ -1,0 +1,52 @@
+{
+  "weather": [
+    {
+      "name": "Berlin",
+      "lat": 52.52,
+      "lon": 13.4
+    },
+    {
+      "name": "New York",
+      "lat": 40.71,
+      "lon": -74.0
+    }
+  ],
+  "rss": [
+    {
+      "name": "Hacker News",
+      "url": "https://hnrss.org/frontpage"
+    }
+  ],
+  "bookmarks": [
+    {
+      "category": "Daily Hub",
+      "links": [
+        {
+          "name": "GitHub",
+          "url": "https://github.com/",
+          "icon": "🌐"
+        },
+        {
+          "name": "YouTube",
+          "url": "https://youtube.com/",
+          "icon": "🌐"
+        }
+      ]
+    },
+    {
+      "category": "Homelab",
+      "links": [
+        {
+          "name": "Router Admin",
+          "url": "http://192.168.1.1",
+          "icon": "🌐"
+        },
+        {
+          "name": "Proxmox",
+          "url": "https://192.168.1.100:8006",
+          "icon": "🌐"
+        }
+      ]
+    }
+  ]
+}
