@@ -1,20 +1,29 @@
 {
   "weather": [
     {
-      "name": "Berlin",
-      "lat": 52.52,
-      "lon": 13.4
-    },
-    {
       "name": "New York",
       "lat": 40.71,
       "lon": -74.0
+    },
+    {
+      "name": "London",
+      "lat": 51.51,
+      "lon": -0.13
+    },
+    {
+      "name": "Berlin",
+      "lat": 52.52,
+      "lon": 13.4
     }
   ],
   "rss": [
     {
       "name": "Hacker News",
       "url": "https://hnrss.org/frontpage"
+    },
+    {
+      "name": "r/selfhosted",
+      "url": "https://www.reddit.com/r/selfhosted/.rss"
     }
   ],
   "bookmarks": [
@@ -24,12 +33,17 @@
         {
           "name": "GitHub",
           "url": "https://github.com/",
-          "icon": "🌐"
+          "icon": "\ud83c\udf10"
         },
         {
           "name": "YouTube",
           "url": "https://youtube.com/",
-          "icon": "🌐"
+          "icon": "\ud83c\udf10"
+        },
+        {
+          "name": "Reddit",
+          "url": "https://reddit.com/",
+          "icon": "\ud83c\udf10"
         }
       ]
     },
@@ -37,13 +51,153 @@
       "category": "Homelab",
       "links": [
         {
-          "name": "Router Admin",
-          "url": "http://192.168.1.1",
+          "name": "Proxmox VE",
+          "url": "https://192.168.1.100:8006",
+          "icon": "\ud83c\udf10"
+        },
+        {
+          "name": "Pi-hole Admin",
+          "url": "http://192.168.1.53/admin",
+          "icon": "\ud83c\udf10"
+        },
+        {
+          "name": "Portainer",
+          "url": "https://192.168.1.200:9443",
+          "icon": "\ud83c\udf10"
+        },
+        {
+          "name": "Grafana Dashboards",
+          "url": "http://192.168.1.10:3000",
+          "icon": "\ud83c\udf10"
+        },
+        {
+          "name": "Home Assistant",
+          "url": "http://192.168.1.5:8123",
+          "icon": "\ud83c\udf10"
+        }
+      ]
+    },
+    {
+      "category": "Media & Storage",
+      "links": [
+        {
+          "name": "Jellyfin",
+          "url": "http://192.168.1.15:8096",
+          "icon": "\ud83c\udf10"
+        },
+        {
+          "name": "Nextcloud",
+          "url": "https://cloud.local",
+          "icon": "\ud83c\udf10"
+        },
+        {
+          "name": "TrueNAS Scale",
+          "url": "https://192.168.1.150",
+          "icon": "\ud83c\udf10"
+        },
+        {
+          "name": "Spotify Web",
+          "url": "https://open.spotify.com",
+          "icon": "\ud83c\udf10"
+        }
+      ]
+    },
+    {
+      "category": "Dev Tools",
+      "links": [
+        {
+          "name": "Stack Overflow",
+          "url": "https://stackoverflow.com/",
+          "icon": "\ud83c\udf10"
+        },
+        {
+          "name": "Docker Hub",
+          "url": "https://hub.docker.com/",
+          "icon": "\ud83c\udf10"
+        },
+        {
+          "name": "CodePen",
+          "url": "https://codepen.io/",
+          "icon": "\ud83c\udf10"
+        },
+        {
+          "name": "CyberChef",
+          "url": "https://gchq.github.io/CyberChef/",
+          "icon": "\ud83c\udf10"
+        }
+      ]
+    },
+    {
+      "category": "Security & Proxy",
+      "links": [
+        {
+          "name": "Nginx Proxy Manager",
+          "url": "http://192.168.1.25:81",
           "icon": "🌐"
         },
         {
-          "name": "Proxmox",
-          "url": "https://192.168.1.100:8006",
+          "name": "Traefik Dashboard",
+          "url": "http://traefik.local:8080",
+          "icon": "🌐"
+        },
+        {
+          "name": "Authentik",
+          "url": "https://auth.local",
+          "icon": "🌐"
+        },
+        {
+          "name": "Uptime Kuma",
+          "url": "http://192.168.1.30:3001",
+          "icon": "🌐"
+        }
+      ]
+    },
+    {
+      "category": "Automation & Media",
+      "links": [
+        {
+          "name": "Sonarr",
+          "url": "http://192.168.1.20:8989",
+          "icon": "🌐"
+        },
+        {
+          "name": "Radarr",
+          "url": "http://192.168.1.20:7878",
+          "icon": "🌐"
+        },
+        {
+          "name": "Prowlarr",
+          "url": "http://192.168.1.20:9696",
+          "icon": "🌐"
+        },
+        {
+          "name": "qBittorrent WebUI",
+          "url": "http://192.168.1.20:8080",
+          "icon": "🌐"
+        }
+      ]
+    },
+    {
+      "category": "Productivity",
+      "links": [
+        {
+          "name": "Paperless-ngx",
+          "url": "http://192.168.1.40:8000",
+          "icon": "🌐"
+        },
+        {
+          "name": "Vaultwarden",
+          "url": "https://vault.local",
+          "icon": "🌐"
+        },
+        {
+          "name": "Excalidraw",
+          "url": "https://excalidraw.com/",
+          "icon": "🌐"
+        },
+        {
+          "name": "Regex101",
+          "url": "https://regex101.com/",
           "icon": "🌐"
         }
       ]
