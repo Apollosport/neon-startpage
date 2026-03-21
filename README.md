@@ -1,4 +1,4 @@
-# 🌌 Synthwave Homelab Dashboard
+# 🌌 Neon Homelab Dashboard
 
 A lightning-fast, ultra-lightweight, and fully customizable startpage for your homelab. Built with pure HTML/CSS/JS on the frontend and a snappy FastAPI backend for persistent storage. No React, no Node.js bloat, no complex YAML configurations—just a beautiful, hackable dashboard.
 
