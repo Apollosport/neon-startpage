@@ -3,8 +3,14 @@
 A lightning-fast, ultra-lightweight, and fully customizable startpage for your homelab. Built with pure HTML/CSS/JS on the frontend and a snappy FastAPI backend for persistent storage. No React, no Node.js bloat, no complex YAML configurations—just a beautiful, hackable dashboard.
 
 ![Dashboard Screenshot](assets/screen1.jpeg)
-![Dashboard Screenshot](assets/screen2.jpeg)
-![Dashboard Screenshot](assets/screen3.png)
+
+The stunning background was created by [AntiStar](https://wallhaven.cc/user/AntiStar) on [Wallhaven](https://wallhaven.cc/w/ey26qk).
+  Background
+  ![Dashboard Screenshot](assets/screen2.png)
+  Another stunning background by [SuperNova4562](https://wallhaven.cc/user/SuperNova4562) on [Wallhaven](https://wallhaven.cc/w/k81776).
+  Background
+  ![Dashboard Screenshot](assets/screen3.png)
+  Simple Gradient Variant
 
 ## ✨ Features
 
