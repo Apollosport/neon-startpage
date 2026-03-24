@@ -1,5 +1,7 @@
 # 🌌 Neon Homelab Dashboard
 
+[![Sponsor](https://img.shields.io/badge/Sponsor-Apollosport-ff69b4?style=for-the-badge&logo=github-sponsors&logoColor=white)](https://github.com/sponsors/Apollosport)
+
 A lightning-fast, ultra-lightweight, and fully customizable startpage for your homelab. Built with pure HTML/CSS/JS on the frontend and a snappy FastAPI backend for persistent storage. No React, no Node.js bloat, no complex YAML configurations—just a beautiful, hackable dashboard.
 
 ![Dashboard Screenshot](assets/screen1.jpeg)
@@ -67,5 +69,10 @@ _Want to add more? Just open `index.html`, locate the `setupSearch()` function, 
 By using this software, you acknowledge that it is provided "as is" without warranty of any kind. The author is not responsible for any broken configurations, data loss, or security vulnerabilities that may arise from its use.
 
 ---
+## 💖 Support the Project
 
-_Built with ❤️ for the Self-Hosted community._
+If `neon-startpage` has made your homelab a little brighter, consider supporting its development! Your sponsorship helps cover the "fuel" (mostly coffee) for late-night feature updates and maintenance.
+
+**[Sponsor on GitHub](https://github.com/sponsors/Apollosport)**
+
+Every bit of support is massively appreciated! 🌌
